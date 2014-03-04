@@ -229,6 +229,10 @@ def _iter_testcase(path):
 
 
 def ex_abstracts(args):
+    if args.english:
+        extractor = EnHanreiAbstractExtractor()
+    else:
+        extractor = HanreiAbstractExtractor()
     for dateheader, abstract in extractor.abstracts_from_xml(args.xmlfile, encoding=args.enc):
         abstract = abstract.replace(u'\n', args.linesep)
         if abstract == u'':
@@ -252,8 +256,9 @@ if __name__ == '__main__':
     abstract_extractor.set_defaults(func=ex_abstracts)
     abstract_extractor.add_argument('xmlfile')
     abstract_extractor.add_argument('--linesep', default=u'|')
-    abstract_extractor.add_argument('--fieldsep', default=u',')
+    abstract_extractor.add_argument('--fieldsep', default=u'&&')
     abstract_extractor.add_argument('-e', '--enc', default='utf-8')
+    abstract_extractor.add_argument('--english', action='store_true', default=False)
 
     args = argX.parse_args()
     args.func(args)
