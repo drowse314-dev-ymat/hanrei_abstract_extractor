@@ -1,7 +1,12 @@
 set -eu
 
+# Usage:
+# sh ex_abst.sh target_dir store_dir [options]
+
 TARGET_DIR=$1
-STORE_DIR=$2
+shift
+STORE_DIR=$1
+shift
 IFS="
 "
 
@@ -9,7 +14,7 @@ echo "# test all files first..."
 for FILE in `ls $TARGET_DIR`
 do
     echo "==> test ${TARGET_DIR}/${FILE}..."
-    EXTR=`python ./extract.py abstract ${TARGET_DIR}/${FILE}`
+    EXTR=`python ./extract.py abstract ${TARGET_DIR}/${FILE} $@`
     echo "ok."
 done
 
@@ -18,10 +23,10 @@ for FILE in `ls $TARGET_DIR`
 do
     echo "==> process ${TARGET_DIR}/${FILE}..."
 
-    for EXTR in `python ./extract.py abstract ${TARGET_DIR}/${FILE}`
+    for EXTR in `python ./extract.py abstract ${TARGET_DIR}/${FILE} $@`
     do
-        DATEHEADER=`echo $EXTR | sed -e "s/\(.*\),.*/\1/g"`
-        CATABSTRACT=`echo $EXTR | sed -e "s/.*,\(.*\)/\1/g"`
+        DATEHEADER=`echo $EXTR | sed -e "s/\(.*\)&&.*/\1/g"`
+        CATABSTRACT=`echo $EXTR | sed -e "s/.*&&\(.*\)/\1/g"`
         ABSTRACT=`echo $CATABSTRACT | tr "|" "\n"`
         CATEGORY=`echo $FILE | cut -f2 -d "_"`
 
