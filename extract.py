@@ -29,8 +29,8 @@ def _get_text_from(element, as_string):
     headtext = element.text
     if headtext is None:
         headtext = u'</{}>'.format(element.tag)
-    as_string = as_string[as_string.find(headtext):] 
-    as_string = as_string[:as_string.find(u'</{}>'.format(element.tag)):] 
+    as_string = as_string[as_string.find(headtext):]
+    as_string = as_string[:as_string.find(u'</{}>'.format(element.tag)):]
     return as_string
 
 def _single_breaks(text):
@@ -108,7 +108,7 @@ def runtest(args):
     orig_elem = etree.fromstring(orig_xml)
     processed = format_text_of(orig_elem)
 
-    expected = ( 
+    expected = (
         u'一　雇用者の安全配慮義務違反によりじん肺にかかったことを'
         u'理由とする損害賠償請求権の消滅時効は、じん肺法所定の管理区分についての'
         u'最終の行政上の決定を受けた時から進行する。\n二　炭鉱労務に従事して'
@@ -155,10 +155,10 @@ def runtest(args):
         assert len(got) == len(exp)
         assert got[0] == exp[0], \
                 (unicode(repr(got[0])) + got[1]).encode('utf-8') + \
-                (unicode(repr(exp[0])) + exp[1]).encode('utf-8') 
+                (unicode(repr(exp[0])) + exp[1]).encode('utf-8')
         assert got[1] == exp[1], \
                 (unicode(repr(got[0])) + got[1]).encode('utf-8') + \
-                (unicode(repr(exp[0])) + exp[1]).encode('utf-8') 
+                (unicode(repr(exp[0])) + exp[1]).encode('utf-8')
         assert got == exp
 
 
