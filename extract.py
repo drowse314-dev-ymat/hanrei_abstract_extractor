@@ -153,8 +153,8 @@ def runtest(args):
         assert got[0] == exp[0]
         assert got[1] == exp[1]
         assert got == exp
-    abstracts = list(extractor.abstracts_from_xml('test/hanrei2.xml', dateheader=True))
 
+    abstracts = list(extractor.abstracts_from_xml('test/hanrei2.xml', dateheader=True))
     expected = list(_iter_testcase('test/abstracts2.txt'))
     for got, exp in zip(abstracts, expected):
         assert len(got) == len(exp)
