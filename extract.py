@@ -97,9 +97,9 @@ class HanreiAbstractExtractor(object):
 class EnHanreiAbstractExtractor(HanreiAbstractExtractor):
 
     re_en_datestr = re.compile(
-        u'(?P<year>\d{4})\.'
-        u'(?P<month>\d{1,2})\.'
-        u'(?P<day>\d{1,2})'
+        u'\s*(?P<year>\d{4})[\.\/]\s*'
+        u'\s*(?P<month>\d{1,2})[\.\/]\s*'
+        u'\s*(?P<day>\d{1,2})\s*'
     )
 
     def expanddate(self, datestr):
