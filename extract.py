@@ -83,7 +83,7 @@ class HanreiAbstractExtractor(object):
 
     def _abstracts_from(self, hanreirecords, dateheader=True):
         for hanrei in hanreirecords.findall(u'.//Hanrei'):
-            date_header = self.expanddate(hanrei.find('.//Date').text)
+            date_header = self.expanddate(hanrei.find('.//Meta/Date').text)
             abstract = self.format_text_of(hanrei.find('.//Abstract'))
             data = []
             if dateheader:
