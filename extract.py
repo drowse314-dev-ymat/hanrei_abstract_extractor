@@ -2,6 +2,8 @@
 
 import sys
 import re
+import datetime
+import rfGengou
 import argparse
 try:
     from html import parser as htmlparser
@@ -92,9 +94,32 @@ class HanreiAbstractExtractor(object):
             yield tuple(data)
 
 
+class EnHanreiAbstractExtractor(HanreiAbstractExtractor):
+
+    re_en_datestr = re.compile(
+        u'(?P<year>\d{4})\.'
+        u'(?P<month>\d{1,2})\.'
+        u'(?P<day>\d{1,2})'
+    )
+
+    def expanddate(self, datestr):
+        matched = self.__class__.re_en_datestr.match(datestr)
+        assert matched
+        as_dict = matched.groupdict()
+        int_y = int(as_dict['year'])
+        int_m = int(as_dict['month'])
+        int_d = int(as_dict['day'])
+        kangou, year, _, _ = rfGengou.s2g(
+            datetime.date(int_y, int_m, int_d),
+        )
+        gou = self.__class__.nengou_alphabet[kangou]
+        return gou + unicode(year), unicode(int_m), unicode(int_d)
+
+
 def runtest(args):
 
     extractor = HanreiAbstractExtractor()
+    en_extractor = EnHanreiAbstractExtractor()
 
     # format one
     orig_xml = (
@@ -145,6 +170,18 @@ def runtest(args):
     for datestr in expected:
         assert extractor.expanddate(datestr) == expected[datestr]
 
+    # date conversion (english)
+    expected = {
+        u'1995.03.07': (u'h7', u'3', u'7'),
+        u'2005.03.27': (u'h17', u'3', u'27'),
+        u'1968.3.01': (u's43', u'3', u'1'),
+        u'1897.01.02': (u'm30', u'1', u'2'),
+        u'1923.12.2': (u't12', u'12', u'2'),
+    }
+
+    for datestr in expected:
+        assert en_extractor.expanddate(datestr) == expected[datestr]
+
     # format an xml
     abstracts = list(extractor.abstracts_from_xml('test/hanrei.xml', dateheader=True))
     expected = list(_iter_testcase('test/abstracts.txt'))
@@ -164,6 +201,14 @@ def runtest(args):
         assert got[1] == exp[1], \
                 (unicode(repr(got[0])) + got[1]).encode('utf-8') + \
                 (unicode(repr(exp[0])) + exp[1]).encode('utf-8')
+        assert got == exp
+
+    abstracts = list(en_extractor.abstracts_from_xml('test/en_hanrei.xml', dateheader=True))
+    expected = list(_iter_testcase('test/en_abstracts.txt'))
+    for got, exp in zip(abstracts, expected):
+        assert len(got) == len(exp)
+        assert got[0] == exp[0]
+        assert got[1] == exp[1]
         assert got == exp
 
 
