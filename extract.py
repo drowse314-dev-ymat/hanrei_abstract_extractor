@@ -66,7 +66,7 @@ class HanreiAbstractExtractor(object):
 
     def expanddate(self, datestr):
         matched = self.__class__.re_datestr.match(datestr)
-        assert matched
+        assert matched, datestr
         as_dict = matched.groupdict()
         gou = self.__class__.nengou_alphabet[as_dict['nengou']]
         year = as_dict['year']
@@ -104,7 +104,7 @@ class EnHanreiAbstractExtractor(HanreiAbstractExtractor):
 
     def expanddate(self, datestr):
         matched = self.__class__.re_en_datestr.match(datestr)
-        assert matched
+        assert matched, datestr
         as_dict = matched.groupdict()
         int_y = int(as_dict['year'])
         int_m = int(as_dict['month'])
