@@ -10,86 +10,91 @@ except:
 from lxml import etree
 
 
-def format_text_of(element):
-    as_string = etree.tostring(element)
-    text = _clean(as_string)
-    text = _get_text_from(element, text)
-    text = text.replace(u'<br/>', u'\n')
-    text = _single_breaks(text)
-    text = _clean_around_breaks(text)
-    return text.strip()
+class HanreiAbstractExtractor(object):
 
-def _clean(htmltext):
-    cleaned = htmlparser.HTMLParser().unescape(htmltext)
-    if cleaned == htmltext:
-        cleaned = cleaned.decode('utf-8')
-    return cleaned
+    def format_text_of(self, element):
+        as_string = etree.tostring(element)
+        text = self._clean(as_string)
+        text = self._get_text_from(element, text)
+        text = text.replace(u'<br/>', u'\n')
+        text = self._single_breaks(text)
+        text = self._clean_around_breaks(text)
+        return text.strip()
 
-def _get_text_from(element, as_string):
-    headtext = element.text
-    if headtext is None:
-        headtext = u'</{}>'.format(element.tag)
-    as_string = as_string[as_string.find(headtext):]
-    as_string = as_string[:as_string.find(u'</{}>'.format(element.tag)):]
-    return as_string
+    def _clean(self, htmltext):
+        cleaned = htmlparser.HTMLParser().unescape(htmltext)
+        if cleaned == htmltext:
+            cleaned = cleaned.decode('utf-8')
+        return cleaned
 
-def _single_breaks(text):
-    length = len(text)
-    while True:
-        text = text.replace('\n\n', '\n')
-        shortened = len(text)
-        if length - shortened == 0:
-            break
-        length = shortened
-    return text
+    def _get_text_from(self, element, as_string):
+        headtext = element.text
+        if headtext is None:
+            headtext = u'</{}>'.format(element.tag)
+        as_string = as_string[as_string.find(headtext):]
+        as_string = as_string[:as_string.find(u'</{}>'.format(element.tag)):]
+        return as_string
 
-def _clean_around_breaks(text):
-    lines = [
-        line.strip()
-        for line in text.split(u'\n')
-    ]
-    return u'\n'.join(lines)
+    def _single_breaks(self, text):
+        length = len(text)
+        while True:
+            text = text.replace('\n\n', '\n')
+            shortened = len(text)
+            if length - shortened == 0:
+                break
+            length = shortened
+        return text
 
-re_datestr = re.compile(
-    u'(?P<nengou>(?:明治)|(?:大正)|(?:昭和)|(?:平成))(?P<year>\d+)年'
-    u'(?P<month>\d{2})月'
-    u'(?P<day>\d{2})日'
-)
-nengou_alphabet = {
-    u'明治': u'm', u'大正': u't',
-    u'昭和': u's', u'平成': u'h',
-}
+    def _clean_around_breaks(self, text):
+        lines = [
+            line.strip()
+            for line in text.split(u'\n')
+        ]
+        return u'\n'.join(lines)
 
-def expanddate(datestr):
-    matched = re_datestr.match(datestr)
-    assert matched
-    as_dict = matched.groupdict()
-    gou = nengou_alphabet[as_dict['nengou']]
-    year = as_dict['year']
-    month = unicode(int(as_dict['month']))
-    day = unicode(int(as_dict['day']))
-    return gou + year, month, day
+    re_datestr = re.compile(
+        u'(?P<nengou>(?:明治)|(?:大正)|(?:昭和)|(?:平成))(?P<year>\d+)年'
+        u'(?P<month>\d{2})月'
+        u'(?P<day>\d{2})日'
+    )
+    nengou_alphabet = {
+        u'明治': u'm', u'大正': u't',
+        u'昭和': u's', u'平成': u'h',
+    }
 
-def abstracts_from_xml(filepath, dateheader=True, encoding='utf-8'):
-    xml_text = _read_as_text(filepath, encoding=encoding)
-    root = etree.fromstring(xml_text.encode(encoding))
-    for abstract in _abstracts_from(root, dateheader=dateheader):
-        yield abstract
+    def expanddate(self, datestr):
+        matched = self.__class__.re_datestr.match(datestr)
+        assert matched
+        as_dict = matched.groupdict()
+        gou = self.__class__.nengou_alphabet[as_dict['nengou']]
+        year = as_dict['year']
+        month = unicode(int(as_dict['month']))
+        day = unicode(int(as_dict['day']))
+        return gou + year, month, day
 
-def _read_as_text(filepath, encoding='utf-8'):
-    return open(filepath, 'rb').read().decode(encoding)
+    def abstracts_from_xml(self, filepath, dateheader=True, encoding='utf-8'):
+        xml_text = self._read_as_text(filepath, encoding=encoding)
+        root = etree.fromstring(xml_text.encode(encoding))
+        for abstract in self._abstracts_from(root, dateheader=dateheader):
+            yield abstract
 
-def _abstracts_from(hanreirecords, dateheader=True):
-    for hanrei in hanreirecords.findall(u'.//Hanrei'):
-        date_header = expanddate(hanrei.find('.//Date').text)
-        abstract = format_text_of(hanrei.find('.//Abstract'))
-        data = []
-        if dateheader:
-            data.append(date_header)
-        data.append(abstract)
-        yield tuple(data)
+    def _read_as_text(self, filepath, encoding='utf-8'):
+        return open(filepath, 'rb').read().decode(encoding)
+
+    def _abstracts_from(self, hanreirecords, dateheader=True):
+        for hanrei in hanreirecords.findall(u'.//Hanrei'):
+            date_header = self.expanddate(hanrei.find('.//Date').text)
+            abstract = self.format_text_of(hanrei.find('.//Abstract'))
+            data = []
+            if dateheader:
+                data.append(date_header)
+            data.append(abstract)
+            yield tuple(data)
+
 
 def runtest(args):
+
+    extractor = HanreiAbstractExtractor()
 
     # format one
     orig_xml = (
@@ -106,7 +111,7 @@ def runtest(args):
         u'経験則又は条理に反する違法がある。\n<br/>ダミー<br/></Abstract>'
     )
     orig_elem = etree.fromstring(orig_xml)
-    processed = format_text_of(orig_elem)
+    processed = extractor.format_text_of(orig_elem)
 
     expected = (
         u'一　雇用者の安全配慮義務違反によりじん肺にかかったことを'
@@ -122,11 +127,11 @@ def runtest(args):
         u'経験則又は条理に反する違法がある。\nダミー'
     )
 
-    assert format_text_of(orig_elem) == expected
+    assert extractor.format_text_of(orig_elem) == expected
 
     empty_xmltext = u'<Abstract><br/></Abstract>'
     empty_abstelem =  etree.fromstring(empty_xmltext)
-    assert format_text_of(empty_abstelem) == u''
+    assert extractor.format_text_of(empty_abstelem) == u''
 
     # date conversion
     expected = {
@@ -138,17 +143,17 @@ def runtest(args):
     }
 
     for datestr in expected:
-        assert expanddate(datestr) == expected[datestr]
+        assert extractor.expanddate(datestr) == expected[datestr]
 
     # format an xml
-    abstracts = list(abstracts_from_xml('test/hanrei.xml', dateheader=True))
+    abstracts = list(extractor.abstracts_from_xml('test/hanrei.xml', dateheader=True))
     expected = list(_iter_testcase('test/abstracts.txt'))
     for got, exp in zip(abstracts, expected):
         assert len(got) == len(exp)
         assert got[0] == exp[0]
         assert got[1] == exp[1]
         assert got == exp
-    abstracts = list(abstracts_from_xml('test/hanrei2.xml', dateheader=True))
+    abstracts = list(extractor.abstracts_from_xml('test/hanrei2.xml', dateheader=True))
 
     expected = list(_iter_testcase('test/abstracts2.txt'))
     for got, exp in zip(abstracts, expected):
@@ -179,7 +184,7 @@ def _iter_testcase(path):
 
 
 def ex_abstracts(args):
-    for dateheader, abstract in abstracts_from_xml(args.xmlfile, encoding=args.enc):
+    for dateheader, abstract in extractor.abstracts_from_xml(args.xmlfile, encoding=args.enc):
         abstract = abstract.replace(u'\n', args.linesep)
         if abstract == u'':
             continue
