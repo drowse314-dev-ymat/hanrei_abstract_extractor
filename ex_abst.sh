@@ -36,7 +36,7 @@ do
         OUTPATH="${STORE_DIR}/${CATEGORY}/${CATEGORY}.${DATEHEADER}.${MODIFIER}.txt"
         while [ -f $OUTPATH ]
         do
-            let MODIFIER=${MODIFIER}+1
+            MODIFIER=${MODIFIER}+1
             OUTPATH="${STORE_DIR}/${CATEGORY}/${CATEGORY}.${DATEHEADER}.${MODIFIER}.txt"
         done
 
