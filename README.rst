@@ -1,4 +1,48 @@
-https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードした判例のXMLファイルから、要旨のテキストを抜き出します
-。
-XMLファイル名は、 :code:`<any text>_<category>_<any text>.xml` のように2つ以上のアンダーラインを含む必要があります。
-:code:`./<出力ディレクトリ>/<category>` 下に要旨のテキストが蓄積されます。
+判例要旨抜き出しスクリプト
+--------------------------
+
+概要
+~~~~
+https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードした判例のXMLファイルから、要旨のテキストを抜き出します。
+
+使い方
+~~~~~~
+事前に必要なのは、Python2.7およびvirtualenvのみです。
+
+`こちら <https://github.com/drowse314-dev-ymat/hanrei_getter>`_ で得られるフォーマットのXMLファイルに対応しています。
+要旨の抽出は、このXMLファイルの蓄積されたディレクトリをひとつ指定して行います。
+
+.. code-block:: txt
+
+    hanrei_collection
+    ├── minji_joukoku_1.xml
+    ├── minji_joukoku_2.xml
+    └── minji_kyokakoukoku_1.xml
+
+それぞれのXMLファイル名は、 :code:`<any text>_<category>_<any text>.xml` のように2つ以上のアンダーラインを含む必要があります。
+
+出力先ディレクトリ ``target_dir`` を決め、
+
+.. code-block:: sh
+
+    virtualenv-2.7 venv # 名前はなんでも
+    source venv/bin/activate
+    pip install -r requirements.txt
+    sh ex_abst.sh hanrei_collection target_dir
+
+とします。 ``target_dir`` が存在しなければ、勝手に作成します。
+
+これにより判例要旨は :code:`./target_dir/<category>` 下にテキストとして蓄積されます。
+一判例につき一ファイルが作成され、ファイル名は :code:`<category>.<日本の年号 + #year>.<#month>.<#day>.<#同日の判例の通し番号>.txt`
+ となります。
+
+なお、要旨の付与されていない判例( ``<Hanrei />`` 下の ``<Abstract />`` が空欄のもの)は無視されます(要旨のファイルが作成されない)。
+
+英語判例の処理
+~~~~~~~~~~~~~~
+`こちら <https://github.com/drowse314-dev-ymat/hanrei_getter>`_ で出力した英語の判例に関しては、日付のフォーマットの処理に
+異なる対応が必要なため、以下のようにオプションを付与します。
+
+.. code-block:: sh
+
+    sh ex_abst.sh english_hanrei_collection target_dir --english
