@@ -36,6 +36,15 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 これにより判例要旨は、 ``target_dir`` 下に各判例のカテゴリに従って作成されたサブディレクトリ
 ``target_dir/<category>`` 下にテキストとして蓄積されます。
 
+.. code-block:: txt
+
+    target_dir
+    ├── joukoku
+    │   ├── joukoku.h7.6.23.1.txt
+    │   └── joukoku.s62.4.4.1.txt
+    └── kyokakoukoku
+        └── kyokakoukoku.h9.1.1.1.txt
+
 一判例につき一ファイルが作成され、ファイル名は ``<category>.<日本の年号 + #year>.<#month>.<#day>.<#同日の判例の通し番号>.txt``
 となります。
 
