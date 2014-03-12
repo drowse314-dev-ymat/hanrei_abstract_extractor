@@ -18,6 +18,8 @@ do
     echo "ok."
 done
 
+mkdir -p ${STORE_DIR}
+
 echo "# store into ${STORE_DIR}..."
 for FILE in `ls $TARGET_DIR`
 do
