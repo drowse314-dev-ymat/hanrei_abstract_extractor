@@ -19,7 +19,8 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
     ├── minji_joukoku_2.xml
     └── minji_kyokakoukoku_1.xml
 
-それぞれのXMLファイル名は、 :code:`<any text>_<category>_<any text>.xml` のように2つ以上のアンダーラインを含む必要があります。
+それぞれのXMLファイル名は、 ``<any text>_<category>_<any text>.xml`` のように2つ以上のアンダーラインを含む必要があります。
+``<category>`` の部分文字列は要旨の出力ディレクトリを分けるために使われるため、カテゴリ分けとして有用なものを使うようにします。
 
 出力先ディレクトリ ``target_dir`` を決め、
 
@@ -32,16 +33,19 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 
 とします。 ``target_dir`` が存在しなければ、勝手に作成します。
 
-これにより判例要旨は :code:`./target_dir/<category>` 下にテキストとして蓄積されます。
-一判例につき一ファイルが作成され、ファイル名は :code:`<category>.<日本の年号 + #year>.<#month>.<#day>.<#同日の判例の通し番号>.txt`
- となります。
+これにより判例要旨は、 ``target_dir`` 下に各判例のカテゴリに従って作成されたサブディレクトリ
+``target_dir/<category>`` 下にテキストとして蓄積されます。
 
-なお、要旨の付与されていない判例( ``<Hanrei />`` 下の ``<Abstract />`` が空欄のもの)は無視されます(要旨のファイルが作成されない)。
+一判例につき一ファイルが作成され、ファイル名は ``<category>.<日本の年号 + #year>.<#month>.<#day>.<#同日の判例の通し番号>.txt``
+となります。
+
+なお、要旨の付与されていない判例( ``<Hanrei />`` 下の ``<Abstract />`` の中のテキストが空欄のもの)は無視されます
+(要旨のファイルが作成されない)。
 
 英語判例の処理
 ~~~~~~~~~~~~~~
 `こちら <https://github.com/drowse314-dev-ymat/hanrei_getter>`_ で出力した英語の判例に関しては、日付のフォーマットの処理に
-異なる対応が必要なため、以下のようにオプションを付与します。
+異なる対応が必要なため、以下のように ``--english`` オプションを付与します。
 
 .. code-block:: sh
 
