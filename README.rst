@@ -26,6 +26,7 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 
 .. code-block:: sh
 
+    cd hanrei_abstract_extractor
     virtualenv-2.7 venv # 名前はなんでも
     source venv/bin/activate
     pip install -r requirements.txt
