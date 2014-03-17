@@ -26,11 +26,11 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 
 .. code-block:: sh
 
-    cd hanrei_abstract_extractor
-    virtualenv-2.7 venv # 名前はなんでも
-    source venv/bin/activate
-    pip install -r requirements.txt
-    sh ex_abst.sh hanrei_collection target_dir
+    $ cd hanrei_abstract_extractor
+    $ virtualenv-2.7 venv # 名前はなんでも
+    $ source venv/bin/activate
+    $ pip install -r requirements.txt
+    $ sh ex_abst.sh hanrei_collection target_dir
 
 とします。 ``target_dir`` が存在しなければ、勝手に作成します。
 
@@ -59,4 +59,4 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 
 .. code-block:: sh
 
-    sh ex_abst.sh english_hanrei_collection target_dir --english
+    $ sh ex_abst.sh english_hanrei_collection target_dir --english
