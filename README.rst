@@ -12,7 +12,7 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 `こちら <https://github.com/drowse314-dev-ymat/hanrei_getter>`_ で得られるフォーマットのXMLファイルに対応しています。
 要旨の抽出は、このXMLファイルの蓄積されたディレクトリをひとつ指定して行います。
 
-.. code-block:: txt
+.. code-block::
 
     hanrei_collection
     ├── minji_joukoku_1.xml
@@ -37,7 +37,7 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 これにより判例要旨は、 ``target_dir`` 下に各判例のカテゴリに従って作成されたサブディレクトリ
 ``target_dir/<category>`` 下にテキストとして蓄積されます。
 
-.. code-block:: txt
+.. code-block::
 
     target_dir
     ├── joukoku
