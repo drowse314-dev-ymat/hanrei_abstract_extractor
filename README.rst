@@ -12,7 +12,7 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 `こちら <https://github.com/drowse314-dev-ymat/hanrei_getter>`_ で得られるフォーマットのXMLファイルに対応しています。
 要旨の抽出は、このXMLファイルの蓄積されたディレクトリをひとつ指定して行います。
 
-.. code-block:: txt
+.. code-block::
 
     hanrei_collection
     ├── minji_joukoku_1.xml
@@ -26,18 +26,18 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 
 .. code-block:: sh
 
-    cd hanrei_abstract_extractor
-    virtualenv-2.7 venv # 名前はなんでも
-    source venv/bin/activate
-    pip install -r requirements.txt
-    sh ex_abst.sh hanrei_collection target_dir
+    $ cd hanrei_abstract_extractor
+    $ virtualenv-2.7 venv # 名前はなんでも
+    $ source venv/bin/activate
+    $ pip install -r requirements.txt
+    $ sh ex_abst.sh hanrei_collection target_dir
 
 とします。 ``target_dir`` が存在しなければ、勝手に作成します。
 
 これにより判例要旨は、 ``target_dir`` 下に各判例のカテゴリに従って作成されたサブディレクトリ
 ``target_dir/<category>`` 下にテキストとして蓄積されます。
 
-.. code-block:: txt
+.. code-block::
 
     target_dir
     ├── joukoku
@@ -59,4 +59,4 @@ https://github.com/drowse314-dev-ymat/hanrei_getter からダウンロードし�
 
 .. code-block:: sh
 
-    sh ex_abst.sh english_hanrei_collection target_dir --english
+    $ sh ex_abst.sh english_hanrei_collection target_dir --english
